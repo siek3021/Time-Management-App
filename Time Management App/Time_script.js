@@ -157,11 +157,92 @@ function addTask(event) {
     closeTaskModal();
 }
 
+function openEditModal(taskId){
+        const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    document.getElementById('taskEditModalContent').innerHTML = `
+        <h3>Edit Task</h3>
+        <div class="form-group">
+            <label for="editTaskName">Task Name</label>
+            <input type="text" id="editTaskName" value="${task.name}" required>
+        </div>
+        <div class="form-group">
+            <label for="editEstimatedTime">Estimated Time (minutes)</label>
+            <input type="number" id="editEstimatedTime" value="${task.estimatedTime}" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="editUrgency">Urgency</label>
+            <select id="editUrgency" required>
+                <option value="low" ${task.urgency === 'low' ? 'selected' : ''}>Low</option>
+                <option value="medium" ${task.urgency === 'medium' ? 'selected' : ''}>Medium</option>
+                <option value="high" ${task.urgency === 'high' ? 'selected' : ''}>High</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="updateTask(${taskId})">Update Task</button>
+        </div>
+    `;
+    document.getElementById('editTaskModal').style.display = 'flex';
+}
+
+function updateTask(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+
+    // Get updated values
+    const newName = document.getElementById('editTaskName').value.trim();
+    const newEstimatedTime = parseInt(document.getElementById('editEstimatedTime').value);
+    const newUrgency = document.getElementById('editUrgency').value;
+
+    // Validate inputs
+    if (!newName || !newEstimatedTime || newEstimatedTime <= 0) {
+        alert('Please fill in all fields with valid values.');
+        return;
+    }
+
+    // Update the task
+    task.name = newName;
+    task.estimatedTime = newEstimatedTime;
+    task.urgency = newUrgency;
+
+    // Save changes
+    saveToStorage();
+    renderTasks();
+
+    // Close modal
+    closeEditModal();
+}
+
+function closeEditModal(){
+    document.getElementById('editTaskModal').style.display = 'none';
+}
+
+function openDeleteModal(taskId) {
+    const task = tasks.find(t => t.id === taskId)
+    document.getElementById('taskDeleteModalContent').innerHTML = `
+            <h3>Delete Task: ${task.name}</h3>
+            <h4>Are you sure you want to delete ${task.name}?</h4>
+                <div id="task-actions">
+                    <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                    <button class="delete-btn" onclick="deleteTask(${taskId})">Delete</button>
+                </div>
+        `;
+    document.getElementById('taskDeleteModal').style.display = 'flex';
+}
+
+function closeDeleteModal() {
+    document.getElementById('taskDeleteModal').style.display = 'none';
+}
+
 function deleteTask(taskId) {
     tasks = tasks.filter(task => task.id !== taskId);
+    document.getElementById('taskDeleteModal').style.display = 'none';
     saveToStorage(); // Save after deleting task
     renderTasks();
 }
+
 
 // New scheduling functions
 function openScheduleModal() {
@@ -328,11 +409,13 @@ function renderTasks() {
                 </div>
             </div>
             <div class="task-actions">
-                <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="edit-button" onclick="openEditModal(${task.id})">Edit</button>
+                <button class="delete-btn" onclick="openDeleteModal(${task.id})">Delete</button>
             </div>
         `;
         tasksList.appendChild(taskElement);
     });
+
 }
 
 // Calendar functions
@@ -404,7 +487,7 @@ function renderCalendar() {
     // Time slots (12 AM to 11 PM) - Full 24 hours
     const startHour = 0;
     const endHour = 24;
-    const cellHeight = 80; // Height of each hour cell in pixels
+    const cellHeight = 79; // Height of each hour cell in pixels
     
     for (let hour = startHour; hour < endHour; hour++) {
         let timeStr;
@@ -453,8 +536,8 @@ function renderCalendar() {
             
             // Calculate position and size
             const startOffset = startHourFloat - startHour; // Hours from start of grid
-            const topPosition = (startOffset * cellHeight); // Position within the scrollable body
-            const height = Math.max(durationHours * cellHeight, 30); // Minimum 30px height
+            const topPosition = (startOffset * 80); // Position within the scrollable body
+            const height = Math.max(durationHours * cellHeight - 20, 30); // Minimum 30px height
             
             // Position the task element absolutely within the body container
             taskElement.style.position = 'absolute';
