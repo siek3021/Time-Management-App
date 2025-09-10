@@ -1,0 +1,855 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8fafc;
+    min-height: 100vh;
+    color: #333;
+}
+
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.current-time {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #3b82f6;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+}
+
+.nav {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.add-task-btn, .schedule-task-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-task-btn:hover, .schedule-task-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.nav-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+}
+
+.nav-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.nav-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.page {
+    display: none;
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+}
+
+.page.active {
+    display: block;
+}
+
+h1 {
+    color: #1e293b;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* Timer Styles */
+.timer-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.timer-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.timer-start {
+    background: #10b981;
+    color: white;
+}
+
+.timer-start:hover {
+    background: #059669;
+}
+
+.timer-pause {
+    background: #f59e0b;
+    color: white;
+}
+
+.timer-pause:hover {
+    background: #d97706;
+}
+
+.timer-stop {
+    background: #ef4444;
+    color: white;
+}
+
+.timer-stop:hover {
+    background: #dc2626;
+}
+
+.timer-reset {
+    background: #6b7280;
+    color: white;
+}
+
+.timer-reset:hover {
+    background: #4b5563;
+}
+
+.timer-input-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.timer-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.timer-input {
+    width: 80px;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.timer-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.timer-label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.quick-timer-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.quick-timer-btn {
+    padding: 8px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.quick-timer-btn:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.task-timer-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #10b981;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.scheduled-task.active-timer {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+    animation: pulse-timer 2s infinite;
+}
+
+@keyframes pulse-timer {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.timer-progress {
+    width: 100%;
+    height: 6px;
+    background: #e2e8f0;
+    border-radius: 3px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.timer-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #059669);
+    border-radius: 3px;
+    transition: width 1s linear;
+    width: 0%;
+}
+
+/* Task Modal */
+.task-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.task-modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e2e8f0;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748b;
+    padding: 5px;
+}
+
+.close-btn:hover {
+    color: #1e293b;
+}
+
+/* Checklist Styles */
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input, .form-group select {
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.tasks-list {
+    display: grid;
+    gap: 15px;
+}
+
+.task-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.task-item:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 5px;
+}
+
+.task-details {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: #718096;
+}
+
+.urgency-high { color: #e53e3e; font-weight: 600; }
+.urgency-medium { color: #d69e2e; font-weight: 600; }
+.urgency-low { color: #38a169; font-weight: 600; }
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.schedule-btn, .delete-btn, .start-timer-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.schedule-btn {
+    background: #3b82f6;
+    color: white;
+}
+
+.schedule-btn:hover {
+    background: #2563eb;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+}
+
+.start-timer-btn {
+    background: #10b981;
+    color: white;
+}
+
+.start-timer-btn:hover {
+    background: #059669;
+}
+
+/* Schedule Styles */
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.date-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.date-nav button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.date-nav button:hover {
+    background: #2563eb;
+}
+
+.current-date {
+    font-size: 18px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.calendar-container {
+    background: #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+    height: 1040px;
+    border: 1px solid #e2e8f0;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.calendar-body {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 1px;
+    background: #e2e8f0;
+    overflow-y: auto;
+    height: 960px;
+    position: relative;
+}
+
+.time-slot, .day-header {
+    background: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.day-header {
+    background: #3b82f6;
+    color: white;
+    font-size: 18px;
+}
+
+.time-slot {
+    font-size: 14px;
+    border-right: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-cell {
+    background: white;
+    min-height: 80px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    padding: 5px;
+}
+
+.calendar-cell:hover {
+    background: #f7fafc;
+}
+
+.scheduled-task {
+    background: #3b82f6;
+    color: white;
+    padding: 8px 12px;
+    margin: 0;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: grab;
+    transition: all 0.3s ease;
+    position: absolute;
+    left: 106px;
+    right: 5px;
+    user-select: none;
+    overflow: hidden;
+    z-index: 10;
+    border: 2px solid #2563eb;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.scheduled-task:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.scheduled-task:active {
+    cursor: grabbing;
+    transform: scale(1.02);
+}
+
+.scheduled-task.dragging {
+    opacity: 0.7;
+    transform: rotate(5deg) scale(1.05);
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.calendar-cell.drag-over {
+    background: #dbeafe !important;
+    border: 2px dashed #3b82f6 !important;
+}
+
+.task-completion-modal, .task-edit-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: #4a5568;
+    font-size: 1.5rem;
+}
+
+.completion-buttons, .edit-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.completion-btn, .edit-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.complete-btn {
+    background: #10b981;
+    color: white;
+}
+
+.complete-btn:hover {
+    background: #059669;
+}
+
+.incomplete-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.incomplete-btn:hover {
+    background: #dc2626;
+}
+
+.remove-btn {
+    background: #ef4444;
+    color: white;
+}
+
+.remove-btn:hover {
+    background: #dc2626;
+}
+
+.edit-time-btn {
+    background: #3b82f6;
+    color: white;
+}
+
+.edit-time-btn:hover {
+    background: #2563eb;
+}
+
+.cancel-edit-btn {
+    background: #6b7280;
+    color: white;
+}
+
+.cancel-edit-btn:hover {
+    background: #4b5563;
+}
+
+.time-slot-info {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.available-tasks {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.task-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.task-option:hover {
+    border-color: #3b82f6;
+    background: #f8fafc;
+}
+
+.task-option-info {
+    flex: 1;
+}
+
+.task-option-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 5px;
+}
+
+.task-option-details {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: #718096;
+}
+
+.select-task-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.select-task-btn:hover {
+    background: #2563eb;
+    margin: 15px 0;
+}
+
+.time-input-group input {
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .current-time {
+        position: static;
+        margin-bottom: 15px;
+        text-align: center;
+        display: inline-block;
+    }
+    
+    .header {
+        text-align: center;
+        padding-top: 60px;
+    }
+    
+    .calendar-grid {
+        font-size: 12px;
+        grid-template-columns: 80px 1fr;
+    }
+    
+    .scheduled-task {
+        font-size: 10px;
+        padding: 4px 8px;
+        left: 86px;
+    }
+
+    .timer-display {
+        font-size: 2.5rem;
+    }
+
+    .timer-controls {
+        flex-wrap: wrap;
+    }
+
+    .timer-inputs {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}

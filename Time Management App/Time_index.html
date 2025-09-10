@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Management App</title>
+    <link rel="stylesheet" href="Time_style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="current-time" id="currentTime"></div>
+            <div class="nav">
+                <button class="nav-btn active" onclick="showPage('checklist')">Checklist</button>
+                <button class="nav-btn" onclick="showPage('schedule')">Schedule</button>
+                <button class="nav-btn" onclick="showPage('timer')">Timer</button>
+            </div>
+            <button class="add-task-btn" onclick="openTaskModal()" id="addTaskBtn">+</button>
+            <button class="schedule-task-btn" onclick="openScheduleModal()" id="scheduleTaskBtn" style="display: none;">+</button>
+        </div>
+
+        <!-- Timer Page -->
+        <div id="timer" class="page">
+            <h1>Focus Timer</h1>
+            
+            <div class="timer-container">
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                
+                <div class="timer-progress">
+                    <div class="timer-progress-bar" id="timerProgressBar"></div>
+                </div>
+                
+                <div class="timer-controls">
+                    <button class="timer-btn timer-start" id="timerStartBtn" onclick="startTimer()">Start</button>
+                    <button class="timer-btn timer-pause" id="timerPauseBtn" onclick="pauseTimer()" style="display: none;">Pause</button>
+                    <button class="timer-btn timer-stop" onclick="stopTimer()">Stop</button>
+                    <button class="timer-btn timer-reset" onclick="resetTimer()">Reset</button>
+                </div>
+
+                <div class="timer-input-section">
+                    <div class="timer-inputs">
+                        <div style="text-align: center;">
+                            <input type="number" id="timerHours" class="timer-input" value="0" min="0" max="23">
+                            <div class="timer-label">Hours</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <input type="number" id="timerMinutes" class="timer-input" value="25" min="0" max="59">
+                            <div class="timer-label">Minutes</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <input type="number" id="timerSeconds" class="timer-input" value="0" min="0" max="59">
+                            <div class="timer-label">Seconds</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="setCustomTimer()" style="margin-left: 10px;">Set</button>
+                    </div>
+                    
+                    <div class="quick-timer-buttons">
+                        <button class="quick-timer-btn" onclick="setQuickTimer(5, 0)">5 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(10, 0)">10 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(15, 0)">15 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(25, 0)">25 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(30, 0)">30 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(45, 0)">45 min</button>
+                        <button class="quick-timer-btn" onclick="setQuickTimer(60, 0)">1 hour</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist Page -->
+        <div id="checklist" class="page active">
+            <h1>Task Checklist</h1>
+            <div class="tasks-list" id="tasksList"></div>
+        </div>
+
+        <!-- Schedule Page -->
+        <div id="schedule" class="page">
+            <h1>Today's Schedule</h1>
+            
+            <div class="schedule-header">
+                <div class="date-nav">
+                    <button onclick="changeDay(-1)">← Yesterday</button>
+                    <span class="current-date" id="currentDate"></span>
+                    <button onclick="changeDay(1)">Tomorrow →</button>
+                </div>
+                <button onclick="goToToday()" class="nav-btn">Today</button>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+
+        <!-- Task Creation Modal -->
+        <div class="task-modal" id="taskModal">
+            <div class="task-modal-content">
+                <div class="modal-header">
+                    <h3>Add New Task</h3>
+                    <button class="close-btn" onclick="closeTaskModal()">&times;</button>
+                </div>
+                <form class="task-form" onsubmit="addTask(event)">
+                    <div class="form-group">
+                        <label for="modalTaskName">Task Name</label>
+                        <input type="text" id="modalTaskName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalEstimatedTime">Estimated Time (minutes)</label>
+                        <input type="number" id="modalEstimatedTime" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalUrgency">Urgency</label>
+                        <select id="modalUrgency" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Task Scheduling Modal -->
+        <div class="task-modal" id="scheduleModal">
+            <div class="task-modal-content">
+                <div class="modal-header">
+                    <h3>Schedule a Task</h3>
+                    <button class="close-btn" onclick="closeScheduleModal()">&times;</button>
+                </div>
+                <div class="close-btn" onclick="closeScheduleModal()">&times;</button>
+                </div>
+                <div class="available-tasks" id="scheduleTasksList" style="max-height: 300px; margin-bottom: 20px;"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeScheduleModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Input Modal -->
+        <div class="task-modal" id="timeInputModal">
+            <div class="task-modal-content">
+                <div class="modal-header">
+                    <h3>Set Start Time</h3>
+                    <button class="close-btn" onclick="closeTimeInputModal()">&times;</button>
+                </div>
+                <div id="selectedTaskInfo" style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;"></div>
+                <form class="task-form" onsubmit="scheduleTaskWithTime(event)">
+                    <div class="form-group">
+                        <label for="startTime">Start Time</label>
+                        <input type="time" id="startTime" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeTimeInputModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Schedule Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="task-completion-modal" id="taskCompletionModal">
+            <div class="modal-content">
+                <h3>Task Time Completed!</h3>
+                <p id="modalTaskName"></p>
+                <p>Did you finish this task?</p>
+                
+                <div class="completion-buttons">
+                    <button class="completion-btn complete-btn" onclick="completeTask(true)">Yes, Finished</button>
+                    <button class="completion-btn incomplete-btn" onclick="completeTask(false)">No, Need More Time</button>
+                </div>
+                
+                <div id="additionalTimeInput" style="display: none;">
+                    <div class="time-input-group">
+                        <label>Additional time needed (minutes):</label>
+                        <input type="number" id="additionalTime" min="1" value="30">
+                    </div>
+                    <button class="completion-btn" onclick="addBackToChecklist()" style="background: #3b82f6; color: white;">Add Back to Checklist</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Edit Modal -->
+        <div class="task-edit-modal" id="taskEditModal">
+            <div class="modal-content">
+                <h3>Edit Scheduled Task</h3>
+                <div id="editTaskInfo" style="margin: 15px 0; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;"></div>
+                
+                <div class="edit-buttons">
+                    <button class="edit-btn complete-btn" onclick="completeTaskEarly()">✓ Complete Task</button>
+                    <button class="edit-btn remove-btn" onclick="removeFromSchedule()">✕ Remove from Schedule</button>
+                    <button class="edit-btn edit-time-btn" onclick="showEditTimeForm()">⏰ Edit Time & Duration</button>
+                    <button class="edit-btn cancel-edit-btn" onclick="closeTaskEditModal()">Cancel</button>
+                </div>
+
+                <!-- Edit Time Form (hidden by default) -->
+                <div id="editTimeForm" style="display: none; margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h4 style="margin-bottom: 15px; color: #374151;">Edit Time & Duration</h4>
+                    <form onsubmit="updateTaskTime(event)">
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="editStartTime">Start Time</label>
+                            <input type="time" id="editStartTime" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="editDuration">Duration (minutes)</label>
+                            <input type="number" id="editDuration" min="1" required>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="hideEditTimeForm()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="Time_script.js"></script>
+</body>
+</html>
