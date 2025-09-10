@@ -1,6 +1,6 @@
-* {
+edit-buttons* {
     margin: 0;
-    padding: 0;
+    padding: 15;
     box-sizing: border-box;
 }
 
@@ -461,7 +461,7 @@ h1 {
     gap: 10px;
 }
 
-.schedule-btn, .delete-btn, .start-timer-btn {
+.schedule-btn, .start-timer-btn, .delete-btn, .cancel-btn, .edit-button {
     padding: 8px 16px;
     border: none;
     border-radius: 8px;
@@ -487,6 +487,15 @@ h1 {
 
 .delete-btn:hover {
     background: #dc2626;
+}
+
+.edit-button {
+    background: #3b82f6;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #2563eb;
 }
 
 .start-timer-btn {
@@ -544,7 +553,7 @@ h1 {
     margin-bottom: 20px;
     position: relative;
     height: 1040px;
-    border: 1px solid #e2e8f0;
+    border: 0px solid #e2e8f0;
 }
 
 .calendar-header {
@@ -554,7 +563,7 @@ h1 {
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 0px solid #e2e8f0;
 }
 
 .calendar-body {
@@ -583,7 +592,7 @@ h1 {
 
 .time-slot {
     font-size: 14px;
-    border-right: 2px solid #e2e8f0;
+    border-right: 0px solid #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -591,11 +600,11 @@ h1 {
 
 .calendar-cell {
     background: white;
-    min-height: 80px;
+    min-height: 79px;
     position: relative;
     cursor: pointer;
     transition: background-color 0.2s;
-    padding: 5px;
+    padding: 0px;
 }
 
 .calendar-cell:hover {
@@ -605,7 +614,7 @@ h1 {
 .scheduled-task {
     background: #3b82f6;
     color: white;
-    padding: 8px 12px;
+    padding: 8px 8px;
     margin: 0;
     border-radius: 6px;
     font-size: 13px;
@@ -645,7 +654,7 @@ h1 {
     border: 2px dashed #3b82f6 !important;
 }
 
-.task-completion-modal, .task-edit-modal {
+.task-completion-modal, .task-edit-modal, .task-delete-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -728,12 +737,12 @@ h1 {
     background: #2563eb;
 }
 
-.cancel-edit-btn {
+.cancel-edit-btn, .cancel-btn {
     background: #6b7280;
     color: white;
 }
 
-.cancel-edit-btn:hover {
+.cancel-edit-btn:hover, .cancel-btn {
     background: #4b5563;
 }
 
@@ -808,9 +817,10 @@ h1 {
 }
 
 .time-input-group input {
-    padding: 10px;
+    padding: 5px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
+    margin: 5px;
     font-size: 16px;
     width: 100px;
     text-align: center;
@@ -831,12 +841,12 @@ h1 {
     
     .calendar-grid {
         font-size: 12px;
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 79px 1fr;
     }
     
     .scheduled-task {
         font-size: 10px;
-        padding: 4px 8px;
+        /* padding: 4px 8px; */
         left: 86px;
     }
 
