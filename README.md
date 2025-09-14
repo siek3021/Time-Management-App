@@ -18,7 +18,7 @@ First, download all the files from GitHub. Then open the file named "index.html"
 ### If your online
 Go to this link[https://time-management-app-nine.vercel.app/](url).
 
-**_*Intended for PC_**
+**_*Intended for PC_**\
 **_*Your data will only be saved in the link you used_**\
 If you used the online link, your data will be saved on the online link.\
 If you use the downloaded file, your data will be saved there.
